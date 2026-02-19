@@ -47,21 +47,43 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
             }
 
-            List(viewModel.channels, selection: Binding(
-                get: { viewModel.selectedChannelID },
+            List(selection: Binding(
+                get: { viewModel.allChannelsMode ? nil : viewModel.selectedChannelID },
                 set: { newValue in
                     guard let id = newValue else { return }
                     Task { await viewModel.selectChannel(id, pixelWidth: 1400) }
                 })
-            ) { channel in
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(channel.label)
-                        .font(.body)
-                    Text("\(Int(channel.sampleRateHz)) Hz \u{2022} \(channel.unit)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            ) {
+                Button {
+                    Task { await viewModel.selectAllChannels(pixelWidth: 1400) }
+                } label: {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("All Channels")
+                            .font(.body.bold())
+                            .foregroundColor(.accentColor)
+                        if viewModel.fileDurationSeconds > 0 {
+                            Text(formatDuration(viewModel.fileDurationSeconds))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 4)
                 }
-                .padding(.vertical, 2)
+                .buttonStyle(.plain)
+                .listRowBackground(viewModel.allChannelsMode ? Color.accentColor.opacity(0.2) : Color.clear)
+
+                ForEach(viewModel.channels) { channel in
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(channel.label)
+                            .font(.body)
+                        Text("\(Int(channel.sampleRateHz)) Hz \u{2022} \(channel.unit)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 2)
+                    .tag(channel.id)
+                }
             }
 
             Spacer()
@@ -82,21 +104,62 @@ struct ContentView: View {
                     .lineLimit(1)
                 Spacer()
                 Button("\u{2190}") { Task { await viewModel.pan(by: -viewModel.visibleDurationSeconds * 0.25, pixelWidth: 1400) } }
+                    .disabled(!viewModel.canPanLeft)
                 Button("\u{2192}") { Task { await viewModel.pan(by: viewModel.visibleDurationSeconds * 0.25, pixelWidth: 1400) } }
+                    .disabled(!viewModel.canPanRight)
             }
 
-            WaveformMinMaxView(
-                waveform: viewModel.waveform,
-                showGrid: viewModel.showGrid,
-                startSeconds: viewModel.visibleStartSeconds,
-                durationSeconds: viewModel.visibleDurationSeconds,
-                unit: viewModel.selectedChannelUnit
-            )
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(NSColor.controlBackgroundColor))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            if viewModel.allChannelsMode {
+                ScrollView {
+                    VStack(spacing: 4) {
+                        ForEach(viewModel.allChannelWaveforms, id: \.channel.id) { entry in
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text(entry.channel.label)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .padding(.leading, 4)
+                                WaveformMinMaxView(
+                                    waveform: entry.waveform,
+                                    showGrid: viewModel.showGrid,
+                                    startSeconds: viewModel.visibleStartSeconds,
+                                    durationSeconds: viewModel.visibleDurationSeconds,
+                                    unit: entry.channel.unit
+                                )
+                                .frame(height: 120)
+                                .background(Color(NSColor.controlBackgroundColor))
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 4)
+                }
+            } else {
+                WaveformMinMaxView(
+                    waveform: viewModel.waveform,
+                    showGrid: viewModel.showGrid,
+                    startSeconds: viewModel.visibleStartSeconds,
+                    durationSeconds: viewModel.visibleDurationSeconds,
+                    unit: viewModel.selectedChannelUnit
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(NSColor.controlBackgroundColor))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
         }
         .padding(12)
+    }
+
+    private func formatDuration(_ seconds: Double) -> String {
+        let h = Int(seconds) / 3600
+        let m = (Int(seconds) % 3600) / 60
+        let s = Int(seconds) % 60
+        if h > 0 {
+            return String(format: "%dh %02dm %02ds", h, m, s)
+        } else if m > 0 {
+            return String(format: "%dm %02ds", m, s)
+        } else {
+            return String(format: "%.1fs", seconds)
+        }
     }
 
     private func openFilePicker() {

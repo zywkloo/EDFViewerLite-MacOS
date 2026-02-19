@@ -13,6 +13,14 @@ final class ViewerViewModel: ObservableObject {
     @Published var visibleStartSeconds: Double = 0
     @Published var visibleDurationSeconds: Double = 10
 
+    @Published var allChannelsMode: Bool = false
+    @Published var allChannelWaveforms: [(channel: ChannelInfo, waveform: DownsampledWaveform)] = []
+
+    private(set) var fileDurationSeconds: Double = 0
+
+    var canPanLeft: Bool { visibleStartSeconds > 0 }
+    var canPanRight: Bool { visibleStartSeconds + visibleDurationSeconds < fileDurationSeconds }
+
     private var reader: EDFReading?
     private let makeReader: (URL) throws -> EDFReading
 
@@ -36,6 +44,8 @@ final class ViewerViewModel: ObservableObject {
                 openedFileURL = url
                 visibleStartSeconds = 0
                 visibleDurationSeconds = min(10, createdReader.fileDurationSeconds)
+                fileDurationSeconds = createdReader.fileDurationSeconds
+                allChannelsMode = false
                 errorMessage = nil
                 debugInfo = "duration=\(createdReader.fileDurationSeconds)s, \(createdReader.channels.count)ch"
                 await refreshWaveform(pixelWidth: 1400)
@@ -52,41 +62,77 @@ final class ViewerViewModel: ObservableObject {
     }
 
     func pan(by deltaSeconds: Double, pixelWidth: Int) async {
-        visibleStartSeconds = max(0, visibleStartSeconds + deltaSeconds)
+        let newStart = visibleStartSeconds + deltaSeconds
+        visibleStartSeconds = max(0, min(newStart, fileDurationSeconds - visibleDurationSeconds))
         await refreshWaveform(pixelWidth: pixelWidth)
     }
 
     func selectChannel(_ id: Int, pixelWidth: Int) async {
+        allChannelsMode = false
         selectedChannelID = id
         await refreshWaveform(pixelWidth: pixelWidth)
     }
 
+    func selectAllChannels(pixelWidth: Int) async {
+        allChannelsMode = true
+        selectedChannelID = nil
+        await refreshWaveform(pixelWidth: pixelWidth)
+    }
+
     func refreshWaveform(pixelWidth: Int) async {
-        guard let reader, let channelID = selectedChannelID else {
+        guard let reader else {
             waveform = .init(mins: [], maxs: [])
-            debugInfo = "no reader or channel"
+            allChannelWaveforms = []
+            debugInfo = "no reader"
             return
         }
 
-        do {
-            let window = try await reader.readWindow(
-                channelID: channelID,
-                startSeconds: visibleStartSeconds,
-                durationSeconds: visibleDurationSeconds
-            )
+        if allChannelsMode {
+            do {
+                var results: [(channel: ChannelInfo, waveform: DownsampledWaveform)] = []
+                for ch in channels {
+                    let window = try await reader.readWindow(
+                        channelID: ch.id,
+                        startSeconds: visibleStartSeconds,
+                        durationSeconds: visibleDurationSeconds
+                    )
+                    let ds = SignalProcessing.downsampleMinMax(window.samples, bucketCount: max(10, pixelWidth))
+                    results.append((channel: ch, waveform: ds))
+                }
+                allChannelWaveforms = results
+                debugInfo = "All channels: \(channels.count) ch, t=\(String(format: "%.2f", visibleStartSeconds))s"
+                print("[EDF-V] \(debugInfo)")
+            } catch {
+                errorMessage = "Failed to read signal windows: \(error.localizedDescription)"
+                debugInfo = "READ ERROR: \(error)"
+                print("[EDF-V] READ ERROR: \(error)")
+            }
+        } else {
+            guard let channelID = selectedChannelID else {
+                waveform = .init(mins: [], maxs: [])
+                debugInfo = "no channel selected"
+                return
+            }
 
-            let ds = SignalProcessing.downsampleMinMax(window.samples, bucketCount: max(10, pixelWidth))
-            waveform = ds
+            do {
+                let window = try await reader.readWindow(
+                    channelID: channelID,
+                    startSeconds: visibleStartSeconds,
+                    durationSeconds: visibleDurationSeconds
+                )
 
-            // Debug info
-            let sMin = window.samples.min() ?? 0
-            let sMax = window.samples.max() ?? 0
-            debugInfo = "ch\(channelID): \(window.samples.count) samples, range [\(String(format: "%.2f", sMin)) .. \(String(format: "%.2f", sMax))], ds=\(ds.mins.count) buckets"
-            print("[EDF-V] \(debugInfo)")
-        } catch {
-            errorMessage = "Failed to read signal window: \(error.localizedDescription)"
-            debugInfo = "READ ERROR: \(error)"
-            print("[EDF-V] READ ERROR: \(error)")
+                let ds = SignalProcessing.downsampleMinMax(window.samples, bucketCount: max(10, pixelWidth))
+                waveform = ds
+
+                let sMin = window.samples.min() ?? 0
+                let sMax = window.samples.max() ?? 0
+                debugInfo = "ch\(channelID): \(window.samples.count) samples, range [\(String(format: "%.2f", sMin)) .. \(String(format: "%.2f", sMax))], ds=\(ds.mins.count) buckets"
+                print("[EDF-V] \(debugInfo)")
+            } catch {
+                errorMessage = "Failed to read signal window: \(error.localizedDescription)"
+                debugInfo = "READ ERROR: \(error)"
+                print("[EDF-V] READ ERROR: \(error)")
+            }
         }
     }
 }
