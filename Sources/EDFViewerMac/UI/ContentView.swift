@@ -21,6 +21,8 @@ struct ContentView: View {
                 Button("Zoom Out") {
                     Task { await viewModel.zoom(by: 1.3, pixelWidth: 1400) }
                 }
+                Toggle("Grid", isOn: $viewModel.showGrid)
+                    .toggleStyle(.checkbox)
             }
         }
         .alert("Error", isPresented: Binding(
@@ -55,7 +57,7 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(channel.label)
                         .font(.body)
-                    Text("\(Int(channel.sampleRateHz)) Hz • \(channel.unit)")
+                    Text("\(Int(channel.sampleRateHz)) Hz \u{2022} \(channel.unit)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -74,14 +76,25 @@ struct ContentView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Button("←") { Task { await viewModel.pan(by: -viewModel.visibleDurationSeconds * 0.25, pixelWidth: 1400) } }
-                Button("→") { Task { await viewModel.pan(by: viewModel.visibleDurationSeconds * 0.25, pixelWidth: 1400) } }
+                Text(viewModel.debugInfo)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
+                Spacer()
+                Button("\u{2190}") { Task { await viewModel.pan(by: -viewModel.visibleDurationSeconds * 0.25, pixelWidth: 1400) } }
+                Button("\u{2192}") { Task { await viewModel.pan(by: viewModel.visibleDurationSeconds * 0.25, pixelWidth: 1400) } }
             }
 
-            WaveformMinMaxView(waveform: viewModel.waveform)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(NSColor.controlBackgroundColor))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+            WaveformMinMaxView(
+                waveform: viewModel.waveform,
+                showGrid: viewModel.showGrid,
+                startSeconds: viewModel.visibleStartSeconds,
+                durationSeconds: viewModel.visibleDurationSeconds,
+                unit: viewModel.selectedChannelUnit
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(NSColor.controlBackgroundColor))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
         }
         .padding(12)
     }

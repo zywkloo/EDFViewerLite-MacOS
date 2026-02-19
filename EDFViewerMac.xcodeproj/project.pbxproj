@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0189F499CBA2FA02C568C8DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F4AA165B20C7A22C4666652 /* Assets.xcassets */; };
+		0420D985CD73DAAADB1381FF /* RealEDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685039C6BD8E44625F389F7F /* RealEDFReader.swift */; };
 		331E6A3E3DD6153B97ACEE5E /* EDFViewerMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBDB47CF168549400858F67 /* EDFViewerMacApp.swift */; };
 		38EBB60755D0D4BF96168425 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277E64FC6A22251D3963489E /* Models.swift */; };
 		4893F89CFEA376361F6BCE3F /* ViewerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E5E248D171C4D22769FF1 /* ViewerViewModel.swift */; };
@@ -27,6 +28,7 @@
 		C4626A72D53262A2C2DD3E5A /* EDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8C31DFA559F5C09DCB5F76 /* EDFReader.swift */; };
 		C5D7FF78E15B1BF29E738205 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F4AA165B20C7A22C4666652 /* Assets.xcassets */; };
 		CB97548711B45BF303A56023 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23549711775AE252DC4F2904 /* SettingsView.swift */; };
+		E47C6F9427DB7F204972E201 /* RealEDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685039C6BD8E44625F389F7F /* RealEDFReader.swift */; };
 		F2D21BB2907F3848546FB912 /* EDFReadIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEFD278699AD177C2EF54A4 /* EDFReadIntegrationTests.swift */; };
 		F2D685683E4CE4752C8A335B /* SignalProcessingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05107E923F2EC062933663BB /* SignalProcessingTests.swift */; };
 /* End PBXBuildFile section */
@@ -36,6 +38,7 @@
 		23549711775AE252DC4F2904 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		277E64FC6A22251D3963489E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		642C7A3D6CBF2EA4D518F57E /* EDFViewerMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EDFViewerMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		685039C6BD8E44625F389F7F /* RealEDFReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealEDFReader.swift; sourceTree = "<group>"; };
 		6BBBEE954FC91DD87D35C0F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6F4AA165B20C7A22C4666652 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A5CC800534BE9F6ABF0271 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fixtures; path = Tests/EDFViewerMacTests/Fixtures; sourceTree = SOURCE_ROOT; };
@@ -118,6 +121,7 @@
 			children = (
 				EF8C31DFA559F5C09DCB5F76 /* EDFReader.swift */,
 				277E64FC6A22251D3963489E /* Models.swift */,
+				685039C6BD8E44625F389F7F /* RealEDFReader.swift */,
 				73D77077467CB2C00AC9729E /* SignalProcessing.swift */,
 			);
 			path = Core;
@@ -225,6 +229,7 @@
 				C4626A72D53262A2C2DD3E5A /* EDFReader.swift in Sources */,
 				331E6A3E3DD6153B97ACEE5E /* EDFViewerMacApp.swift in Sources */,
 				79EC8ACF0C645A877E4088ED /* Models.swift in Sources */,
+				0420D985CD73DAAADB1381FF /* RealEDFReader.swift in Sources */,
 				BC0E02DFE3122F4782538402 /* SettingsView.swift in Sources */,
 				9AE0AC69672428C5C9066DA1 /* SignalProcessing.swift in Sources */,
 				8C13F9FE1B2B30AE67962BD0 /* ViewerViewModel.swift in Sources */,
@@ -241,6 +246,7 @@
 				52C55A2071571C081BF044C8 /* EDFReader.swift in Sources */,
 				B6506E56AAE7144B26E32235 /* EDFReaderTests.swift in Sources */,
 				38EBB60755D0D4BF96168425 /* Models.swift in Sources */,
+				E47C6F9427DB7F204972E201 /* RealEDFReader.swift in Sources */,
 				CB97548711B45BF303A56023 /* SettingsView.swift in Sources */,
 				5E30C7E6FC222DD0CCF2C6CA /* SignalProcessing.swift in Sources */,
 				F2D685683E4CE4752C8A335B /* SignalProcessingTests.swift in Sources */,

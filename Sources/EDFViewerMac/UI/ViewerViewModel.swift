@@ -7,6 +7,8 @@ final class ViewerViewModel: ObservableObject {
     @Published var waveform: DownsampledWaveform = .init(mins: [], maxs: [])
     @Published var openedFileURL: URL?
     @Published var errorMessage: String?
+    @Published var showGrid: Bool = true
+    @Published var debugInfo: String = ""
 
     @Published var visibleStartSeconds: Double = 0
     @Published var visibleDurationSeconds: Double = 10
@@ -14,8 +16,14 @@ final class ViewerViewModel: ObservableObject {
     private var reader: EDFReading?
     private let makeReader: (URL) throws -> EDFReading
 
-    init(makeReader: @escaping (URL) throws -> EDFReading = MockEDFReader.init) {
+    init(makeReader: @escaping (URL) throws -> EDFReading = RealEDFReader.init) {
         self.makeReader = makeReader
+    }
+
+    var selectedChannelUnit: String {
+        guard let id = selectedChannelID,
+              let ch = channels.first(where: { $0.id == id }) else { return "" }
+        return ch.unit
     }
 
     func openFile(url: URL) {
@@ -26,10 +34,14 @@ final class ViewerViewModel: ObservableObject {
                 channels = createdReader.channels
                 selectedChannelID = createdReader.channels.first?.id
                 openedFileURL = url
+                visibleStartSeconds = 0
+                visibleDurationSeconds = min(10, createdReader.fileDurationSeconds)
                 errorMessage = nil
+                debugInfo = "duration=\(createdReader.fileDurationSeconds)s, \(createdReader.channels.count)ch"
                 await refreshWaveform(pixelWidth: 1400)
             } catch {
                 errorMessage = "Failed to open EDF/BDF file: \(error.localizedDescription)"
+                debugInfo = "OPEN ERROR: \(error)"
             }
         }
     }
@@ -52,6 +64,7 @@ final class ViewerViewModel: ObservableObject {
     func refreshWaveform(pixelWidth: Int) async {
         guard let reader, let channelID = selectedChannelID else {
             waveform = .init(mins: [], maxs: [])
+            debugInfo = "no reader or channel"
             return
         }
 
@@ -61,9 +74,19 @@ final class ViewerViewModel: ObservableObject {
                 startSeconds: visibleStartSeconds,
                 durationSeconds: visibleDurationSeconds
             )
-            waveform = SignalProcessing.downsampleMinMax(window.samples, bucketCount: max(10, pixelWidth))
+
+            let ds = SignalProcessing.downsampleMinMax(window.samples, bucketCount: max(10, pixelWidth))
+            waveform = ds
+
+            // Debug info
+            let sMin = window.samples.min() ?? 0
+            let sMax = window.samples.max() ?? 0
+            debugInfo = "ch\(channelID): \(window.samples.count) samples, range [\(String(format: "%.2f", sMin)) .. \(String(format: "%.2f", sMax))], ds=\(ds.mins.count) buckets"
+            print("[EDF-V] \(debugInfo)")
         } catch {
             errorMessage = "Failed to read signal window: \(error.localizedDescription)"
+            debugInfo = "READ ERROR: \(error)"
+            print("[EDF-V] READ ERROR: \(error)")
         }
     }
 }

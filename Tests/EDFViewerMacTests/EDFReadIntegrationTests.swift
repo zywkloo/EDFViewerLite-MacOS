@@ -75,4 +75,24 @@ final class EDFReadIntegrationTests: XCTestCase {
             .withUnsafeBytes { $0.load(as: Int16.self) }
         XCTAssertEqual(last, 32767)
     }
+
+    // MARK: - End-to-end: RealEDFReader → readWindow → downsampleMinMax
+
+    func testEndToEndReadAndDownsample() async throws {
+        let reader = try RealEDFReader(fileURL: fixtureURL())
+        let window = try await reader.readWindow(channelID: 0, startSeconds: 0, durationSeconds: 1.0)
+
+        XCTAssertFalse(window.samples.isEmpty, "readWindow should return samples")
+
+        let downsampled = SignalProcessing.downsampleMinMax(window.samples, bucketCount: 100)
+        XCTAssertFalse(downsampled.mins.isEmpty, "downsample should produce min values")
+        XCTAssertFalse(downsampled.maxs.isEmpty, "downsample should produce max values")
+        XCTAssertEqual(downsampled.mins.count, downsampled.maxs.count)
+
+        // The ramp spans -100 to +100, so overall min should be near -100 and max near +100
+        let overallMin = downsampled.mins.min()!
+        let overallMax = downsampled.maxs.max()!
+        XCTAssertEqual(overallMin, -100.0, accuracy: 1.0)
+        XCTAssertEqual(overallMax, 100.0, accuracy: 1.0)
+    }
 }
