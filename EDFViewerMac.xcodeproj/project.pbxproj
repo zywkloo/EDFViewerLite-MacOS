@@ -1,0 +1,492 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0189F499CBA2FA02C568C8DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F4AA165B20C7A22C4666652 /* Assets.xcassets */; };
+		331E6A3E3DD6153B97ACEE5E /* EDFViewerMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBDB47CF168549400858F67 /* EDFViewerMacApp.swift */; };
+		38EBB60755D0D4BF96168425 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277E64FC6A22251D3963489E /* Models.swift */; };
+		4893F89CFEA376361F6BCE3F /* ViewerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E5E248D171C4D22769FF1 /* ViewerViewModel.swift */; };
+		4F0FA489159F9E0F24EBBA9B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBBEE954FC91DD87D35C0F6 /* ContentView.swift */; };
+		522181A6606FED6AD7AACD89 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = 72A5CC800534BE9F6ABF0271 /* Fixtures */; };
+		52C55A2071571C081BF044C8 /* EDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8C31DFA559F5C09DCB5F76 /* EDFReader.swift */; };
+		5E30C7E6FC222DD0CCF2C6CA /* SignalProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D77077467CB2C00AC9729E /* SignalProcessing.swift */; };
+		79EC8ACF0C645A877E4088ED /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277E64FC6A22251D3963489E /* Models.swift */; };
+		88357D1328CDEFDFA10F3BC6 /* ViewerViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30423A2EA593113195FE7 /* ViewerViewModelTests.swift */; };
+		8C13F9FE1B2B30AE67962BD0 /* ViewerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E5E248D171C4D22769FF1 /* ViewerViewModel.swift */; };
+		8C24A0BC681D828230745D92 /* WaveformMinMaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38E06C1F78853D5E4E61C0D /* WaveformMinMaxView.swift */; };
+		9AE0AC69672428C5C9066DA1 /* SignalProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D77077467CB2C00AC9729E /* SignalProcessing.swift */; };
+		A12C86EB7DB490B17FCA5669 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBBEE954FC91DD87D35C0F6 /* ContentView.swift */; };
+		B6506E56AAE7144B26E32235 /* EDFReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3691C97574D02C73304ACA8 /* EDFReaderTests.swift */; };
+		B7CB8881E1070FBF4BD44ED1 /* WaveformMinMaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38E06C1F78853D5E4E61C0D /* WaveformMinMaxView.swift */; };
+		BC0E02DFE3122F4782538402 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23549711775AE252DC4F2904 /* SettingsView.swift */; };
+		C4626A72D53262A2C2DD3E5A /* EDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8C31DFA559F5C09DCB5F76 /* EDFReader.swift */; };
+		C5D7FF78E15B1BF29E738205 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F4AA165B20C7A22C4666652 /* Assets.xcassets */; };
+		CB97548711B45BF303A56023 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23549711775AE252DC4F2904 /* SettingsView.swift */; };
+		F2D21BB2907F3848546FB912 /* EDFReadIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEFD278699AD177C2EF54A4 /* EDFReadIntegrationTests.swift */; };
+		F2D685683E4CE4752C8A335B /* SignalProcessingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05107E923F2EC062933663BB /* SignalProcessingTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		05107E923F2EC062933663BB /* SignalProcessingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalProcessingTests.swift; sourceTree = "<group>"; };
+		23549711775AE252DC4F2904 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		277E64FC6A22251D3963489E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		642C7A3D6CBF2EA4D518F57E /* EDFViewerMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EDFViewerMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BBBEE954FC91DD87D35C0F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6F4AA165B20C7A22C4666652 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		72A5CC800534BE9F6ABF0271 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fixtures; path = Tests/EDFViewerMacTests/Fixtures; sourceTree = SOURCE_ROOT; };
+		73D77077467CB2C00AC9729E /* SignalProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalProcessing.swift; sourceTree = "<group>"; };
+		9BEFD278699AD177C2EF54A4 /* EDFReadIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EDFReadIntegrationTests.swift; sourceTree = "<group>"; };
+		9EBDB47CF168549400858F67 /* EDFViewerMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EDFViewerMacApp.swift; sourceTree = "<group>"; };
+		A0D30423A2EA593113195FE7 /* ViewerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerViewModelTests.swift; sourceTree = "<group>"; };
+		E38E06C1F78853D5E4E61C0D /* WaveformMinMaxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformMinMaxView.swift; sourceTree = "<group>"; };
+		EF8C31DFA559F5C09DCB5F76 /* EDFReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EDFReader.swift; sourceTree = "<group>"; };
+		F3691C97574D02C73304ACA8 /* EDFReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EDFReaderTests.swift; sourceTree = "<group>"; };
+		F74E5E248D171C4D22769FF1 /* ViewerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerViewModel.swift; sourceTree = "<group>"; };
+		FF3952EB1E6AE31866D64165 /* EDFViewerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EDFViewerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		10BE9C25C0AA4690074BA6E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF3952EB1E6AE31866D64165 /* EDFViewerMac.app */,
+				642C7A3D6CBF2EA4D518F57E /* EDFViewerMacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		602B4F90E92E4139B0FB63CD /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9EBDB47CF168549400858F67 /* EDFViewerMacApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6212636E960242A1FBD2AB9A /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				6BBBEE954FC91DD87D35C0F6 /* ContentView.swift */,
+				23549711775AE252DC4F2904 /* SettingsView.swift */,
+				F74E5E248D171C4D22769FF1 /* ViewerViewModel.swift */,
+				E38E06C1F78853D5E4E61C0D /* WaveformMinMaxView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		8DE7AB746B1D517FEE8A1D82 /* EDFViewerMacTests */ = {
+			isa = PBXGroup;
+			children = (
+				F3691C97574D02C73304ACA8 /* EDFReaderTests.swift */,
+				9BEFD278699AD177C2EF54A4 /* EDFReadIntegrationTests.swift */,
+				05107E923F2EC062933663BB /* SignalProcessingTests.swift */,
+				A0D30423A2EA593113195FE7 /* ViewerViewModelTests.swift */,
+			);
+			name = EDFViewerMacTests;
+			path = Tests/EDFViewerMacTests;
+			sourceTree = "<group>";
+		};
+		A2F717F3F64CE410012A6F29 = {
+			isa = PBXGroup;
+			children = (
+				72A5CC800534BE9F6ABF0271 /* Fixtures */,
+				DD5A95D9E7628A7A44068021 /* EDFViewerMac */,
+				8DE7AB746B1D517FEE8A1D82 /* EDFViewerMacTests */,
+				10BE9C25C0AA4690074BA6E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DD5A95D9E7628A7A44068021 /* EDFViewerMac */ = {
+			isa = PBXGroup;
+			children = (
+				6F4AA165B20C7A22C4666652 /* Assets.xcassets */,
+				602B4F90E92E4139B0FB63CD /* App */,
+				E0886E15B1137D6865D6261D /* Core */,
+				6212636E960242A1FBD2AB9A /* UI */,
+			);
+			name = EDFViewerMac;
+			path = Sources/EDFViewerMac;
+			sourceTree = "<group>";
+		};
+		E0886E15B1137D6865D6261D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				EF8C31DFA559F5C09DCB5F76 /* EDFReader.swift */,
+				277E64FC6A22251D3963489E /* Models.swift */,
+				73D77077467CB2C00AC9729E /* SignalProcessing.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D24B0A7AC084FF701C6C53E1 /* EDFViewerMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 82646AF6A9C63BDEE710A79A /* Build configuration list for PBXNativeTarget "EDFViewerMacTests" */;
+			buildPhases = (
+				CE7DF445F97308FBB40783D9 /* Sources */,
+				71D83192CF93FA501CDD3AD1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EDFViewerMacTests;
+			packageProductDependencies = (
+			);
+			productName = EDFViewerMacTests;
+			productReference = 642C7A3D6CBF2EA4D518F57E /* EDFViewerMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E9C17CA237A96BB23B8A4900 /* EDFViewerMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EB6653DC04993E69AF12B39 /* Build configuration list for PBXNativeTarget "EDFViewerMac" */;
+			buildPhases = (
+				63666D1677C8F136D90A07EE /* Sources */,
+				390E59A88B470D9F115AFA7F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EDFViewerMac;
+			packageProductDependencies = (
+			);
+			productName = EDFViewerMac;
+			productReference = FF3952EB1E6AE31866D64165 /* EDFViewerMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8B024E27BCB2363FE07D4324 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E9C17CA237A96BB23B8A4900 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 92A067BA7D1452EDA8F23285 /* Build configuration list for PBXProject "EDFViewerMac" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A2F717F3F64CE410012A6F29;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E9C17CA237A96BB23B8A4900 /* EDFViewerMac */,
+				D24B0A7AC084FF701C6C53E1 /* EDFViewerMacTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		390E59A88B470D9F115AFA7F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5D7FF78E15B1BF29E738205 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71D83192CF93FA501CDD3AD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0189F499CBA2FA02C568C8DF /* Assets.xcassets in Resources */,
+				522181A6606FED6AD7AACD89 /* Fixtures in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		63666D1677C8F136D90A07EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F0FA489159F9E0F24EBBA9B /* ContentView.swift in Sources */,
+				C4626A72D53262A2C2DD3E5A /* EDFReader.swift in Sources */,
+				331E6A3E3DD6153B97ACEE5E /* EDFViewerMacApp.swift in Sources */,
+				79EC8ACF0C645A877E4088ED /* Models.swift in Sources */,
+				BC0E02DFE3122F4782538402 /* SettingsView.swift in Sources */,
+				9AE0AC69672428C5C9066DA1 /* SignalProcessing.swift in Sources */,
+				8C13F9FE1B2B30AE67962BD0 /* ViewerViewModel.swift in Sources */,
+				B7CB8881E1070FBF4BD44ED1 /* WaveformMinMaxView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE7DF445F97308FBB40783D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A12C86EB7DB490B17FCA5669 /* ContentView.swift in Sources */,
+				F2D21BB2907F3848546FB912 /* EDFReadIntegrationTests.swift in Sources */,
+				52C55A2071571C081BF044C8 /* EDFReader.swift in Sources */,
+				B6506E56AAE7144B26E32235 /* EDFReaderTests.swift in Sources */,
+				38EBB60755D0D4BF96168425 /* Models.swift in Sources */,
+				CB97548711B45BF303A56023 /* SettingsView.swift in Sources */,
+				5E30C7E6FC222DD0CCF2C6CA /* SignalProcessing.swift in Sources */,
+				F2D685683E4CE4752C8A335B /* SignalProcessingTests.swift in Sources */,
+				4893F89CFEA376361F6BCE3F /* ViewerViewModel.swift in Sources */,
+				88357D1328CDEFDFA10F3BC6 /* ViewerViewModelTests.swift in Sources */,
+				8C24A0BC681D828230745D92 /* WaveformMinMaxView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		02E1FD94EBE991D8C10F158F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_CFBundleDisplayName = "EDF Viewer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.edfviewer.EDFViewerMac;
+				PRODUCT_MODULE_NAME = EDFViewerMac;
+				PRODUCT_NAME = "EDF Viewer";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		09197CDB005B109210CAA7C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.edfviewer.EDFViewerMacTests;
+				PRODUCT_MODULE_NAME = EDFViewerMac;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		69798B97A10D34627630E915 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.edfviewer.EDFViewerMacTests;
+				PRODUCT_MODULE_NAME = EDFViewerMac;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8FE3420A784B327A87AE4C5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		BCB2E36216767DBDC006BCAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		BE95C49F31585BF90D08217F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_GENERATION_MODE = GeneratedFile;
+				INFOPLIST_KEY_CFBundleDisplayName = "EDF Viewer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.edfviewer.EDFViewerMac;
+				PRODUCT_MODULE_NAME = EDFViewerMac;
+				PRODUCT_NAME = "EDF Viewer";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6EB6653DC04993E69AF12B39 /* Build configuration list for PBXNativeTarget "EDFViewerMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02E1FD94EBE991D8C10F158F /* Debug */,
+				BE95C49F31585BF90D08217F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		82646AF6A9C63BDEE710A79A /* Build configuration list for PBXNativeTarget "EDFViewerMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69798B97A10D34627630E915 /* Debug */,
+				09197CDB005B109210CAA7C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		92A067BA7D1452EDA8F23285 /* Build configuration list for PBXProject "EDFViewerMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FE3420A784B327A87AE4C5E /* Debug */,
+				BCB2E36216767DBDC006BCAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8B024E27BCB2363FE07D4324 /* Project object */;
+}

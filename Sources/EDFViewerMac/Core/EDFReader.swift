@@ -6,15 +6,6 @@ protocol EDFReading {
     func readWindow(channelID: Int, startSeconds: Double, durationSeconds: Double) async throws -> WaveformWindow
 }
 
-enum EDFReaderFactory {
-    static func makeReader(from url: URL) throws -> EDFReading {
-        // Placeholder implementation that keeps the app functional while EDFlib
-        // integration is added in a dedicated C/Swift bridging target.
-        // Replace this with an EDFlib-backed reader once edflib.c/h are vendored.
-        return MockEDFReader(fileURL: url)
-    }
-}
-
 final class MockEDFReader: EDFReading {
     let channels: [ChannelInfo]
     let fileDurationSeconds: Double = 120

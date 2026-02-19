@@ -12,11 +12,16 @@ final class ViewerViewModel: ObservableObject {
     @Published var visibleDurationSeconds: Double = 10
 
     private var reader: EDFReading?
+    private let makeReader: (URL) throws -> EDFReading
+
+    init(makeReader: @escaping (URL) throws -> EDFReading = MockEDFReader.init) {
+        self.makeReader = makeReader
+    }
 
     func openFile(url: URL) {
         Task {
             do {
-                let createdReader = try EDFReaderFactory.makeReader(from: url)
+                let createdReader = try makeReader(url)
                 reader = createdReader
                 channels = createdReader.channels
                 selectedChannelID = createdReader.channels.first?.id
