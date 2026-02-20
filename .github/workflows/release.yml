@@ -23,22 +23,21 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: Build Release
+      - name: Archive
         run: |
-          xcodebuild build \
+          xcodebuild archive \
             -project EDFViewerMac.xcodeproj \
             -scheme EDFViewerMac \
             -configuration Release \
             -destination 'platform=macOS' \
-            -derivedDataPath build/DerivedData \
+            -archivePath build/EDFViewerMac.xcarchive \
             CODE_SIGN_IDENTITY=- \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty || true
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Package DMG
         run: |
-          APP=$(find build/DerivedData -name "EDFViewerMac.app" -type d | head -1)
+          APP="build/EDFViewerMac.xcarchive/Products/Applications/EDFViewerMac.app"
           echo "Packaging: $APP"
           mkdir -p dist
           hdiutil create \
