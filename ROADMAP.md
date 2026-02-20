@@ -14,6 +14,9 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 | Min/max downsampling renderer | Preserves peaks at any zoom level |
 | Protocol-driven reader (`EDFReading`) | Parser-agnostic UI |
 | Unit and integration test suite | Parser, signal processing, ViewModel |
+| All Channels montage view | Stacked scrollable view of every channel |
+| Pan boundary clamping | Arrows disable at t=0 and file end |
+| File duration display | Shown in sidebar under "All Channels" |
 
 ---
 
@@ -21,12 +24,20 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 
 **Goal:** A viewer a clinician or researcher can open on day one and trust.
 
+> **Priority:** This is the "make it real" milestone. Everything here turns the current MVP into a tool people actually want to keep open.
+
 ### Viewing Experience
-- [ ] **Time-axis labels and grid overlay** — show seconds/minutes on the waveform x-axis; draw horizontal grid lines per channel
 - [ ] **Per-channel amplitude scaling** — drag or scroll on the y-axis of a channel to scale it independently
 - [ ] **Keyboard navigation** — arrow keys to pan; `+`/`-` or scroll wheel to zoom; spacebar to jump forward one page
-- [ ] **Vertical scrolling** — scroll through more channels than fit on screen without hiding them in the sidebar
 - [ ] **Current time indicator** — a vertical cursor showing playback position in the time axis
+
+### Large-File IO (critical engineering upgrade)
+
+The current `RealEDFReader` loads the entire file into memory with `Data(contentsOf:)`. This works for small files but will fail or become sluggish on long PSG/EEG recordings (often 500 MB–2 GB+). This is one of the highest-leverage upgrades.
+
+- [ ] **Memory-mapped IO** — replace `Data(contentsOf:)` with `mmap` or `FileHandle`-based reads
+- [ ] **LRU record cache** — cache decoded data records; evict least-recently-used when memory pressure rises
+- [ ] **Background decoding pipeline** — decode records off the main thread so the UI stays responsive during pan/zoom
 
 ### Parser
 - [ ] **`edflib.c` integration as `EDFlibReader`** — BSD 3-clause C library as a fallback for files the Swift parser rejects
@@ -37,21 +48,23 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 
 ---
 
-## Milestone 2 — Annotations and Markup
+## Milestone 2 — EDF+ Annotations (core, not optional)
 
 **Goal:** Match EDFbrowser's annotation handling so EDF+/BDF+ files are fully usable.
 
-- [ ] **EDF+ annotation channel parsing** — read `EDF Annotations` signal records; display as timestamped labels on the waveform
-- [ ] **Annotation overlay** — render annotation markers as vertical lines with hover-to-read labels
+> **Priority:** Annotations are a defining EDFbrowser feature. Without them, EDF+ files with events/sleep stages are essentially broken. This is the single biggest functional gap.
+
+- [ ] **EDF+ annotation channel parsing** — read `EDF Annotations` signal records (TAL: time-stamped annotation lists); display as timestamped labels on the waveform
+- [ ] **Annotation overlay** — render annotation markers as vertical lines / shaded regions with hover-to-read labels
 - [ ] **Annotation list panel** — sortable table of all annotations with timestamp, duration, and description; click to jump to that time
 - [ ] **Annotation editor** — add, edit, and delete annotations; write them back to the EDF+ file
 - [ ] **Import/export annotations** — plain-text (TSV/CSV) round-trip for use with Python or R
 
 ---
 
-## Milestone 3 — Measurement Tools
+## Milestone 3 — Precision Measurement Tools
 
-**Goal:** Precise signal measurement without leaving the app.
+**Goal:** Precise signal measurement without leaving the app. These features transform "toy viewer" into "real lab tool".
 
 - [ ] **Crosshair cursor** — show exact timestamp and amplitude at the mouse position
 - [ ] **Two-point measurement** — click to place two crosshairs; display the delta time and delta amplitude between them
@@ -64,9 +77,11 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 
 **Goal:** Built-in filtering so users don't need an external tool for basic preprocessing.
 
+> **Priority:** Even a minimal filter panel (notch + bandpass) plus an FFT view covers ~80% of perceived "power user" needs.
+
 ### Filters
-- [ ] **Butterworth bandpass / highpass / lowpass** — 1st–8th order; per-channel toggle
 - [ ] **Notch filter** — 50 Hz and 60 Hz with adjustable Q-factor; essential for powerline interference
+- [ ] **Butterworth bandpass / highpass / lowpass** — 1st–8th order; per-channel toggle
 - [ ] **Moving average filter** — simple smoothing
 - [ ] **Spike / artifact rejection filter** — remove fast transients and pacemaker spikes
 
@@ -79,6 +94,8 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 ## Milestone 5 — Montages and Multi-Channel Views
 
 **Goal:** Clinical EEG and ECG workflows require channel derivations and custom layouts.
+
+> **Priority:** For EEG users, montage support is "table stakes". Without re-referencing, bipolar chains, and standard 10-20 layouts, the app cannot serve EEG clinicians.
 
 - [ ] **Montage editor** — define derived channels as linear combinations (e.g., bipolar EEG: `C3 - A2`)
 - [ ] **Saved montage presets** — save and reload named montages; ship standard 10-20 EEG montages as defaults
@@ -102,18 +119,23 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 
 ---
 
-## Milestone 7 — File Operations
+## Milestone 7 — Export and Quick Utilities
 
-**Goal:** Batch and preprocessing workflows without writing a script.
+**Goal:** The minimum export subset that makes users happy without writing a script.
 
-- [ ] **File cropper** — export a time-range subset as a new EDF file
+> **Priority:** These three cover the most common "I need to get data out" requests.
+
+- [ ] **Export visible window to CSV** — export selected channels and time range to CSV/TSV
+- [ ] **Export screenshot / PDF of current view** — render the current waveform view to a printable PDF or PNG with header metadata
+- [ ] **Crop to new EDF/BDF file** — export a time-range subset as a new EDF file
+
+### Extended File Operations (later)
 - [ ] **File splitter** — split by duration or by annotation markers
 - [ ] **File combiner** — concatenate multiple EDF files into one
 - [ ] **Decimator / resampler** — downsample signals to a lower sample rate and save
 - [ ] **BDF to EDF converter** — 24-bit BDF → 16-bit EDF with correct rescaling
 - [ ] **EDF+D to EDF+C converter** — convert discontinuous EDF+ to continuous EDF+
 - [ ] **ASCII import** — load columnar text data and save as EDF
-- [ ] **ASCII export** — export selected channels and time range to CSV/TSV
 
 ---
 
@@ -127,12 +149,10 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 
 ---
 
-## Milestone 9 — Export and Sharing
+## Milestone 9 — Validation and Reports
 
-**Goal:** Get signal images and reports out of the app.
+**Goal:** Help users trust their files.
 
-- [ ] **Print / PDF export** — render the current waveform view to a printable PDF with header metadata
-- [ ] **Image export** — save the waveform view as PNG or SVG
 - [ ] **EDF/BDF compatibility report** — surface header validation issues with plain-language explanations (matching EDFbrowser's validator output)
 
 ---
@@ -153,30 +173,37 @@ This roadmap maps the path from the current foundation to a native macOS alterna
 
 | EDFbrowser Feature | EDFViewer-MacOS Status |
 |---|---|
-| EDF / BDF parsing | Done |
-| EDF+ / BDF+ parsing | Milestone 2 |
+| EDF / BDF parsing | **Done** |
+| Channel sidebar + selection | **Done** |
+| All-channels stacked view | **Done** |
+| Time-axis grid overlay | **Done** |
+| Pan with boundary clamping | **Done** |
+| Large-file handling (mmap) | Milestone 1 |
+| EDF+ / BDF+ annotation parsing | Milestone 2 |
 | Annotation editor | Milestone 2 |
-| Header editor | Milestone 1 |
-| Time axis / grid | Milestone 1 |
+| Header inspector | Milestone 1 |
 | Keyboard navigation | Milestone 1 |
-| Per-channel scaling | Milestone 1 |
+| Per-channel amplitude scaling | Milestone 1 |
 | Crosshair measurement | Milestone 3 |
 | Rectangle zoom | Milestone 3 |
-| Butterworth filter | Milestone 4 |
 | Notch filter | Milestone 4 |
+| Butterworth bandpass | Milestone 4 |
 | Power spectrum (FFT) | Milestone 4 |
 | CDSA spectrogram | Milestone 4 |
 | Montage editor | Milestone 5 |
+| Montage presets (10-20 EEG) | Milestone 5 |
 | Hypnogram | Milestone 6 |
 | aEEG / CFM | Milestone 6 |
-| Pan-Tompkins QRS | Milestone 6 |
+| Pan-Tompkins QRS detector | Milestone 6 |
 | Waveform averaging | Milestone 6 |
-| File cropper / splitter | Milestone 7 |
+| Export to CSV | Milestone 7 |
+| Export to PDF / PNG | Milestone 7 |
+| File cropper | Milestone 7 |
+| File splitter / combiner | Milestone 7 |
 | BDF → EDF converter | Milestone 7 |
 | ASCII import/export | Milestone 7 |
 | Multi-file session | Milestone 8 |
 | Streaming / monitor mode | Milestone 8 |
-| Print / PDF export | Milestone 9 |
 | EDF validator | Milestone 9 |
 | Notarized release | Milestone 10 |
 

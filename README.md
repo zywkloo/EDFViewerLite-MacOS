@@ -143,25 +143,35 @@ xcodebuild test -project EDFViewerMac.xcodeproj -scheme EDFViewerMac
 
 ## Roadmap
 
-### Now — Solid Foundation
+### Done — Viewer Foundation
 - [x] Native SwiftUI macOS app
-- [x] Pure Swift EDF/BDF parser
+- [x] Pure Swift EDF/BDF parser with digital-to-physical calibration
 - [x] Channel sidebar and waveform rendering
+- [x] All Channels stacked montage view
 - [x] Min/max downsampling for performant rendering
+- [x] Pan with boundary clamping (arrows disable at file edges)
+- [x] Time-axis grid overlay
 - [x] Unit and integration test suite
 
-### Next — Parser and UX
-- [ ] Integrate `edflib.c` (BSD 3-clause) as a fallback parser for edge-case EDF files
-- [ ] `EDFReaderFactory` with automatic parser selection
-- [ ] Time-axis labels and grid overlay
-- [ ] Keyboard navigation (pan, zoom)
-- [ ] Channel amplitude scaling per channel
+### Next — Usable Viewer (Milestone 1)
+- [ ] Per-channel amplitude scaling
+- [ ] Keyboard navigation (arrow keys, scroll wheel zoom)
+- [ ] Large-file IO redesign (mmap + LRU cache)
+- [ ] Header inspector panel
 
-### Later — Distribution
-- [ ] Notarized `.dmg` releases via GitHub Actions
-- [ ] GitHub Releases for direct download (no App Store required)
-- [ ] Mac App Store submission (Apple Developer Program)
-- [ ] Multi-file session support
+### Then — Annotations + Measurement (Milestones 2–3)
+- [ ] EDF+ annotation channel parsing (TAL)
+- [ ] Annotation overlay, list panel, and editor
+- [ ] Crosshair cursor with time + amplitude readout
+- [ ] Rectangle zoom
+
+### Later — Processing + Clinical (Milestones 4–6)
+- [ ] Notch + bandpass filters
+- [ ] FFT / power spectrum view
+- [ ] Montage editor with 10-20 EEG presets
+- [ ] Pan-Tompkins QRS detector
+
+See [ROADMAP.md](ROADMAP.md) for the full milestone plan and EDFbrowser feature comparison.
 
 ---
 
