@@ -47,6 +47,8 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
             }
 
+            allChannelsRow
+
             List(selection: Binding(
                 get: { viewModel.allChannelsMode ? nil : viewModel.selectedChannelID },
                 set: { newValue in
@@ -54,25 +56,6 @@ struct ContentView: View {
                     Task { await viewModel.selectChannel(id, pixelWidth: 1400) }
                 })
             ) {
-                Button {
-                    Task { await viewModel.selectAllChannels(pixelWidth: 1400) }
-                } label: {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("All Channels")
-                            .font(.body.bold())
-                            .foregroundColor(.accentColor)
-                        if viewModel.fileDurationSeconds > 0 {
-                            Text(formatDuration(viewModel.fileDurationSeconds))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 4)
-                }
-                .buttonStyle(.plain)
-                .listRowBackground(viewModel.allChannelsMode ? Color.accentColor.opacity(0.2) : Color.clear)
-
                 ForEach(viewModel.channels) { channel in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(channel.label)
@@ -89,6 +72,34 @@ struct ContentView: View {
             Spacer()
         }
         .padding(12)
+    }
+
+    private var allChannelsRow: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("All Channels")
+                .font(.body.bold())
+                .foregroundStyle(viewModel.allChannelsMode ? Color.accentColor : .primary)
+            if viewModel.fileDurationSeconds > 0 {
+                Text(formatDuration(viewModel.fileDurationSeconds))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(viewModel.allChannelsMode ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(viewModel.allChannelsMode ? Color.accentColor.opacity(0.5) : Color.gray.opacity(0.2), lineWidth: 1)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            Task { await viewModel.selectAllChannels(pixelWidth: 1400) }
+        }
     }
 
     private var waveformPane: some View {

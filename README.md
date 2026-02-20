@@ -6,6 +6,12 @@ A native macOS SwiftUI viewer for EDF/BDF biomedical signal files — free, open
 
 ---
 
+## App Preview
+
+![EDF Viewer main screen](docs/images/app-main.png)
+
+---
+
 ## Why This Exists
 
 [EDFbrowser](https://www.teuniz.net/edfbrowser/) is a widely used open source EDF viewer but requires Qt and does not feel native on macOS. This project brings EDF/BDF viewing to macOS as a first-class native app — no Java, no Wine, no Qt. Just Swift and SwiftUI.
@@ -141,6 +147,82 @@ xcodebuild test -project EDFViewerMac.xcodeproj -scheme EDFViewerMac
 
 ---
 
+## Release DMG (Developer ID + Notarization)
+
+This repo includes XcodeGen signing config files and a release script:
+
+- `configs/Debug.xcconfig`
+- `configs/Release.xcconfig`
+- `scripts/release/release_dmg.sh`
+
+Required environment variables:
+
+```bash
+export APPLE_TEAM_ID="YOUR_TEAM_ID"
+export APPLE_ID="your-apple-id@example.com"
+export APPLE_APP_SPECIFIC_PASSWORD="xxxx-xxxx-xxxx-xxxx"
+```
+
+Build, sign, notarize, and staple a DMG:
+
+```bash
+./scripts/release/release_dmg.sh
+```
+
+Output:
+
+- `build/release/EDFViewer.dmg`
+
+### GitHub Actions release (signed DMG)
+
+The workflow at `.github/workflows/release.yml` will:
+
+- build an unsigned DMG if signing secrets are missing
+- build, sign, notarize, and staple the DMG if secrets are present
+
+Add these repository secrets:
+
+- `APPLE_TEAM_ID`
+- `APPLE_ID`
+- `APPLE_APP_SPECIFIC_PASSWORD`
+- `MACOS_CERT_P12_BASE64`
+- `MACOS_CERT_PASSWORD`
+- `MACOS_KEYCHAIN_PASSWORD` (optional, recommended)
+
+Create `MACOS_CERT_P12_BASE64` from your Developer ID certificate export:
+
+1. Open **Keychain Access**
+2. Export your **Developer ID Application** cert + private key as `.p12`
+3. Convert to base64:
+
+```bash
+base64 -i developer_id_application.p12 | pbcopy
+```
+
+Paste that copied value into `MACOS_CERT_P12_BASE64`.
+
+Flow:
+
+- `develop` branch pushes -> temporary DMG workflow (`release-temp-dmg.yml`)
+- `main` tags (`v*`) -> signed + notarized release workflow (`release.yml`)
+
+### Temporary DMG pipeline (no Apple notarization)
+
+Use workflow:
+
+- `.github/workflows/release-temp-dmg.yml`
+
+How to run:
+
+1. GitHub -> **Actions**
+2. Choose **Release Temp DMG** (or push to `develop` to run automatically)
+3. Click **Run workflow**
+4. Download `temp-dmg` artifact
+
+This build is ad-hoc signed for testing only and may show Gatekeeper warnings on other Macs.
+
+---
+
 ## Roadmap
 
 ### Done — Viewer Foundation
@@ -196,3 +278,9 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 *"Heal the sick, cleanse the lepers, raise the dead, cast out devils: freely ye have received, freely give."*
 — Matthew 10:8
+
+---
+
+## Sponsor
+
+[![Sponsor](https://img.shields.io/badge/Sponsor-zywkloo-ea4aaa?logo=githubsponsors)](https://github.com/sponsors/zywkloo)

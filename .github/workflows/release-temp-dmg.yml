@@ -1,0 +1,63 @@
+name: Release Temp DMG
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  temp-dmg:
+    runs-on: macos-15
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build Release app (unsigned)
+        run: |
+          xcodebuild build \
+            -project EDFViewerMac.xcodeproj \
+            -scheme EDFViewerMac \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath ./.derivedData-temp \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package temporary DMG
+        run: |
+          APP_PATH="$(find ./.derivedData-temp/Build/Products/Release -maxdepth 1 -name '*.app' -type d | head -1)"
+          echo "App: $APP_PATH"
+
+          # Ad-hoc sign for local testing scenarios. This is not notarized.
+          codesign --force --deep --sign - "$APP_PATH"
+
+          mkdir -p dist
+          DMG_PATH="dist/EDFViewer-temp-${GITHUB_RUN_NUMBER}.dmg"
+          hdiutil create \
+            -volname "EDFViewer Temp" \
+            -srcfolder "$APP_PATH" \
+            -ov \
+            -format UDZO \
+            "$DMG_PATH"
+
+          echo "DMG_PATH=$DMG_PATH" >> "$GITHUB_ENV"
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: temp-dmg
+          path: ${{ env.DMG_PATH }}
+          if-no-files-found: error

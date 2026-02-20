@@ -23,7 +23,74 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: Archive
+      - name: Ensure tag commit is on main
+        id: main_check
+        continue-on-error: true
+        run: |
+          git fetch origin main --depth=1
+          if git merge-base --is-ancestor "$GITHUB_SHA" "origin/main"; then
+            echo "Tag commit is on main."
+            echo "on_main=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag commit is not on main. Release will be skipped."
+            echo "on_main=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+      - name: Determine signing mode
+        id: signing
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: |
+          if [[ "${{ steps.main_check.outputs.on_main }}" != "true" ]]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "reason=not_on_main" >> "$GITHUB_OUTPUT"
+            echo "Skipping: tag commit is not on main."
+          elif [[ -n "${APPLE_TEAM_ID}" && -n "${APPLE_ID}" && -n "${APPLE_APP_SPECIFIC_PASSWORD}" && -n "${MACOS_CERT_P12_BASE64}" && -n "${MACOS_CERT_PASSWORD}" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "reason=ready" >> "$GITHUB_OUTPUT"
+            echo "Release mode: signed + notarized"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "reason=missing_secrets" >> "$GITHUB_OUTPUT"
+            echo "Skipping: missing signing/notarization secrets."
+          fi
+
+      - name: Import Developer ID certificate
+        if: steps.signing.outputs.enabled == 'true'
+        env:
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          CERT_PATH="$RUNNER_TEMP/dev_id_cert.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASSWORD="${KEYCHAIN_PASSWORD:-temp-keychain-password}"
+
+          echo "$MACOS_CERT_P12_BASE64" | base64 --decode > "$CERT_PATH"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH"
+
+          security import "$CERT_PATH" \
+            -k "$KEYCHAIN_PATH" \
+            -P "$MACOS_CERT_PASSWORD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/security \
+            -T /usr/bin/xcodebuild
+
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+      - name: Archive (signed)
+        if: steps.signing.outputs.enabled == 'true'
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           xcodebuild archive \
             -project EDFViewerMac.xcodeproj \
@@ -31,13 +98,40 @@ jobs:
             -configuration Release \
             -destination 'platform=macOS' \
             -archivePath build/EDFViewerMac.xcarchive \
-            CODE_SIGN_IDENTITY=- \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            APPLE_TEAM_ID="$APPLE_TEAM_ID"
+
+      - name: Export signed app
+        if: steps.signing.outputs.enabled == 'true'
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          cat > build/ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>developer-id</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>teamID</key>
+            <string>${APPLE_TEAM_ID}</string>
+          </dict>
+          </plist>
+          PLIST
+
+          xcodebuild -exportArchive \
+            -archivePath build/EDFViewerMac.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist build/ExportOptions.plist
 
       - name: Package DMG
+        env:
+          SIGNING_ENABLED: ${{ steps.signing.outputs.enabled }}
         run: |
-          APP=$(find build/EDFViewerMac.xcarchive -name "*.app" -type d | head -1)
+          if [[ "$SIGNING_ENABLED" == "true" ]]; then
+            APP=$(find build/export -name "*.app" -type d | head -1)
+          fi
           echo "Packaging: $APP"
           mkdir -p dist
           hdiutil create \
@@ -47,7 +141,28 @@ jobs:
             -format UDZO \
             "dist/EDFViewerMac-${{ github.ref_name }}.dmg"
 
+      - name: Sign and notarize DMG
+        if: steps.signing.outputs.enabled == 'true'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          DMG="dist/EDFViewerMac-${{ github.ref_name }}.dmg"
+
+          codesign --force --sign "Developer ID Application" --timestamp "$DMG"
+
+          xcrun notarytool submit "$DMG" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+
+          xcrun stapler staple "$DMG"
+          spctl -a -t open --context context:primary-signature -v "$DMG"
+
       - name: Create GitHub Release
+        if: steps.signing.outputs.enabled == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -60,8 +175,14 @@ jobs:
           ### Install
           1. Download \`EDFViewerMac-${{ github.ref_name }}.dmg\`
           2. Open the DMG and drag the app to Applications
-          3. Right-click → Open on first launch (app is not yet notarized)
+          3. Open normally from Applications
 
           ### Requirements
           macOS 13 or later" \
             "dist/EDFViewerMac-${{ github.ref_name }}.dmg"
+
+      - name: Skip notice
+        if: steps.signing.outputs.enabled != 'true'
+        run: |
+          echo "Release skipped."
+          echo "Reason: ${{ steps.signing.outputs.reason }}"
