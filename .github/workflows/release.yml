@@ -126,11 +126,16 @@ jobs:
             -exportOptionsPlist build/ExportOptions.plist
 
       - name: Package DMG
+        if: steps.signing.outputs.enabled == 'true'
         env:
           SIGNING_ENABLED: ${{ steps.signing.outputs.enabled }}
         run: |
           if [[ "$SIGNING_ENABLED" == "true" ]]; then
             APP=$(find build/export -name "*.app" -type d | head -1)
+          fi
+          if [[ -z "${APP:-}" ]]; then
+            echo "No app bundle found to package."
+            exit 1
           fi
           echo "Packaging: $APP"
           mkdir -p dist
