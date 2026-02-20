@@ -9,6 +9,7 @@ build/
 DerivedData/
 /.derivedData/
 /.derivedData2/
+/.derivedData*/
 .build/
 
 ## User settings
