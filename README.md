@@ -6,6 +6,12 @@ A native macOS SwiftUI viewer for EDF/BDF biomedical signal files — free, open
 
 ---
 
+## App Preview
+
+![EDF Viewer main screen](docs/images/app-main.png)
+
+---
+
 ## Why This Exists
 
 [EDFbrowser](https://www.teuniz.net/edfbrowser/) is a widely used open source EDF viewer but requires Qt and does not feel native on macOS. This project brings EDF/BDF viewing to macOS as a first-class native app — no Java, no Wine, no Qt. Just Swift and SwiftUI.
@@ -196,3 +202,9 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 *"Heal the sick, cleanse the lepers, raise the dead, cast out devils: freely ye have received, freely give."*
 — Matthew 10:8
+
+---
+
+## Sponsor
+
+[![Sponsor](https://img.shields.io/badge/Sponsor-zywkloo-ea4aaa?logo=githubsponsors)](https://github.com/sponsors/zywkloo)
