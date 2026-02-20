@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: macos-14
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 15
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build Release
+        run: |
+          xcodebuild build \
+            -project EDFViewerMac.xcodeproj \
+            -scheme EDFViewerMac \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty || true
+
+      - name: Package DMG
+        run: |
+          APP=$(find build/DerivedData -name "EDFViewerMac.app" -type d | head -1)
+          echo "Packaging: $APP"
+          mkdir -p dist
+          hdiutil create \
+            -volname "EDFViewerMac ${{ github.ref_name }}" \
+            -srcfolder "$APP" \
+            -ov \
+            -format UDZO \
+            "dist/EDFViewerMac-${{ github.ref_name }}.dmg"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "EDFViewerMac ${{ github.ref_name }}" \
+            --notes "## EDFViewerMac ${{ github.ref_name }}
+
+          Native macOS EDF/BDF viewer — no Qt, no Java, no dependencies.
+
+          ### Install
+          1. Download \`EDFViewerMac-${{ github.ref_name }}.dmg\`
+          2. Open the DMG and drag the app to Applications
+          3. Right-click → Open on first launch (app is not yet notarized)
+
+          ### Requirements
+          macOS 13 or later" \
+            "dist/EDFViewerMac-${{ github.ref_name }}.dmg"
