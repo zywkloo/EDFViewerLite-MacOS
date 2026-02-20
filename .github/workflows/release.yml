@@ -186,8 +186,22 @@ jobs:
           macOS 13 or later" \
             "dist/EDFViewerMac-${{ github.ref_name }}.dmg"
 
-      - name: Skip notice
+      - name: Create unsigned GitHub Release (no Apple signing)
         if: steps.signing.outputs.enabled != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Release skipped."
-          echo "Reason: ${{ steps.signing.outputs.reason }}"
+          gh release create "${{ github.ref_name }}" \
+            --title "EDFViewerMac ${{ github.ref_name }} (unsigned)" \
+            --notes "## EDFViewerMac ${{ github.ref_name }} (unsigned)
+
+          This release was created without Apple Developer ID signing and notarization.
+
+          Reason: \`${{ steps.signing.outputs.reason }}\`
+
+          If you want a fully trusted macOS release experience, configure signing/notarization secrets:
+          - APPLE_TEAM_ID
+          - APPLE_ID
+          - APPLE_APP_SPECIFIC_PASSWORD
+          - MACOS_CERT_P12_BASE64
+          - MACOS_CERT_PASSWORD"
