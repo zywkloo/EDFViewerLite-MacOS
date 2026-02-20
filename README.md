@@ -90,24 +90,52 @@ Tests/EDFViewerMacTests/
 
 - macOS 13 or later
 - Xcode 15 or later
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) — generates the `.xcodeproj` from `project.yml`
 
-### Build and Run
+> **Note:** `.xcodeproj` is not committed to the repo. You must generate it locally before opening in Xcode.
+
+---
+
+### Setup
+
+**1. Install XcodeGen**
 
 ```bash
-# Generate the Xcode project
-xcodegen generate
+brew install xcodegen
+```
 
-# Open in Xcode
+**2. Clone the repo**
+
+```bash
+git clone https://github.com/your-org/EDFViewer-MacOS.git
+cd EDFViewer-MacOS
+```
+
+**3. Generate the Xcode project**
+
+```bash
+xcodegen generate
+```
+
+This reads `project.yml` and produces `EDFViewerMac.xcodeproj`. Re-run this any time `project.yml` changes (e.g. after pulling new files or adding targets).
+
+**4. Open in Xcode and run**
+
+```bash
 open EDFViewerMac.xcodeproj
 ```
 
-Then press `Cmd+R` to build and run.
+Press `Cmd+R` to build and run.
+
+**5. Try the sample file**
+
+A sample EDF file is included in `Samples/combined-sample.edf`. Use **File → Open** in the app to load it and verify everything is working.
+
+---
 
 ### Run Tests
 
 ```bash
-xcodegen generate
 xcodebuild test -project EDFViewerMac.xcodeproj -scheme EDFViewerMac
 ```
 
