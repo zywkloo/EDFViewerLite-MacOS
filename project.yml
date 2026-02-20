@@ -1,6 +1,6 @@
 name: EDFViewerMac
 options:
-  bundleIdPrefix: com.edfviewer
+  bundleIdPrefix: com.goldenarc
   deploymentTarget:
     macOS: "13.0"
   xcodeVersion: "15.0"
@@ -19,8 +19,9 @@ targets:
           - "**/.DS_Store"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.edfviewer.EDFViewerMac
-        PRODUCT_NAME: "EDF Viewer"
+        PRODUCT_BUNDLE_IDENTIFIER: com.goldenarc.edfviewer
+        PRODUCT_NAME: EDFViewer
+        EXECUTABLE_NAME: EDFViewer
         PRODUCT_MODULE_NAME: EDFViewerMac
         INFOPLIST_GENERATION_MODE: GeneratedFile
         MARKETING_VERSION: "1.0.0"
@@ -49,6 +50,6 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.edfviewer.EDFViewerMacTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.goldenarc.edfviewer.tests
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_MODULE_NAME: EDFViewerMac
